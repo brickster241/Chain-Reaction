@@ -337,4 +337,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ROWS: 8
   COLS: 12
-  TilePrefab: {fileID: 6270232605889689491, guid: 8a7432057d5269144945a15d7f763797, type: 3}
+  TilePrefab: {fileID: 2584951619189372888, guid: 8a7432057d5269144945a15d7f763797, type: 3}
