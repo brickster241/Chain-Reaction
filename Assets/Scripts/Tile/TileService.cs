@@ -7,6 +7,13 @@ public class TileService : MonoBehaviour
     public TileType tileType;
     private Vector2Int tileIndex;
     public List<TileService> Neighbours;
+    private TileSM tileSM;
+
+    private void Awake() {
+        tileSM = new TileSM();
+        tileSM.SetTileService(this);
+        tileSM.SwitchState(TileState.EMPTY);
+    }
     
     public void SetTileNeighbours(List<TileService> TileNeighbours) {
         Neighbours = TileNeighbours;
