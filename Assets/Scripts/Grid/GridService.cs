@@ -11,12 +11,16 @@ public class GridService : MonoBehaviour
     [SerializeField] int COLS = 12;
 
     [SerializeField] TileService TilePrefab;
+    [SerializeField] Color TileDefaultColor;
+    [SerializeField] Color TileHoverColor;
 
     TileService[, ] GridTiles;
+    Vector2Int hoverIndex;
 
     // Start is called before the first frame update
     void Start()
     {
+        hoverIndex = new Vector2Int(-1, -1);
         GridTiles = new TileService[ROWS, COLS];
         GenerateGrid();
         SetTileAttributes();
@@ -87,5 +91,30 @@ public class GridService : MonoBehaviour
         float gridWidth = COLS * tileWidth;
         Vector3 offset = new Vector3(-gridWidth / 2 + tileWidth / 2, gridHeight / 2 - tileHeight / 2, 0f);
         return offset;
+    }
+
+    private void Update() {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        UpdateTileColors(mousePosition);
+    }
+
+    public void UpdateTileColors(Vector3 mousePosition) {
+        Vector3 mouseOffsetPosition = mousePosition - CalculateTileOffset();
+        float row = (-mouseOffsetPosition.y + TilePrefab.transform.localScale.y * 0.5f) / TilePrefab.transform.localScale.y;
+        float col = (mouseOffsetPosition.x + TilePrefab.transform.localScale.x * 0.5f) / TilePrefab.transform.localScale.x;
+        Vector2Int newhoverIndex = new Vector2Int((int)row, (int)col);
+        Debug.Log(newhoverIndex);
+        if (newhoverIndex == hoverIndex)
+            return;
+        if (isTileValid(hoverIndex.x, hoverIndex.y)) {
+            GridTiles[hoverIndex.x, hoverIndex.y].SetTileSpriteColor(TileDefaultColor);
+        }
+        if (isTileValid(newhoverIndex.x, newhoverIndex.y)) {
+            GridTiles[newhoverIndex.x, newhoverIndex.y].SetTileSpriteColor(TileHoverColor);
+            hoverIndex = newhoverIndex;
+        } else {
+            hoverIndex.x = -1;
+            hoverIndex.y = -1;
+        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileService : MonoBehaviour
 {   
+    [SerializeField] SpriteRenderer tileSprite;
     public TileType tileType;
     private Vector2Int tileIndex;
     public List<TileService> Neighbours;
@@ -26,6 +27,14 @@ public class TileService : MonoBehaviour
         } else {
             tileType = TileType.MIDDLE;
         }
+    }
+
+    public void SetTileSpriteColor(Color color) {
+        tileSprite.color = color;
+    }
+
+    public void OnTileClick() {
+        orbService.OnOrbClick();
     }
 
     public OrbService GetOrbService() {

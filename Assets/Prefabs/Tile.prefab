@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67883cc3685529e4b9680d6582afa29a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileSprite: {fileID: 6270232604403134357}
   tileType: 0
   Neighbours: []
   orbService: {fileID: 4241967475866159636}
@@ -488,5 +489,3 @@ MonoBehaviour:
   FirstOrb: {fileID: 8775374446778292363}
   SecondOrb: {fileID: 8775374446634417069}
   ThirdOrb: {fileID: 8775374445865215711}
-  orbType: 0
-  orbStatus: 0
