@@ -20,7 +20,9 @@ public class OrbNone : OrbBase
         base.OnOrbClick();
         TileType tileType = orbSM.GetOrbService().transform.parent.gameObject.GetComponent<TileService>().tileType;
         if (tileType == TileType.CORNER) {
-            // CHANGE ORB STATUS TO UNSTABLE
+            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.UNSTABLE);
+        } else {
+            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
         }
         orbSM.SwitchState(OrbType.SINGLE);
     }

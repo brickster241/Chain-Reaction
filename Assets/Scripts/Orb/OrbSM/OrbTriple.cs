@@ -19,7 +19,7 @@ public class OrbTriple : OrbBase
     {
         base.OnOrbClick();
         Debug.Log("Invoke Chain Reaction");
-        // CHANGE ORB STATUS TO STABLE.
+        orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
         orbSM.SwitchState(OrbType.NONE);
         
     }

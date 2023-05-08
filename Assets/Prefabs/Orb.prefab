@@ -50,6 +50,8 @@ MonoBehaviour:
   FirstOrb: {fileID: 4996575623512817492}
   SecondOrb: {fileID: 4996575623384587378}
   ThirdOrb: {fileID: 4996575622681575680}
+  orbType: 0
+  orbStatus: 0
 --- !u!1 &4996575622681575682
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,7 +68,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4996575622681575681
 Transform:
   m_ObjectHideFlags: 0
@@ -150,7 +152,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4996575623384587379
 Transform:
   m_ObjectHideFlags: 0
@@ -234,7 +236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4996575623512817493
 Transform:
   m_ObjectHideFlags: 0

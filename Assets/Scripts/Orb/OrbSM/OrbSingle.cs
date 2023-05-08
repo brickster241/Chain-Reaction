@@ -20,13 +20,14 @@ public class OrbSingle : OrbBase
         base.OnOrbClick();
         TileType tileType = orbSM.GetOrbService().transform.parent.gameObject.GetComponent<TileService>().tileType;
         if (tileType == TileType.CORNER) {
-            // CHANGE ORB STATUS TO STABLE
             Debug.Log("Invoke Chain Reaction.");
+            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
             orbSM.SwitchState(OrbType.NONE);
         } else if (tileType == TileType.EDGE){
-            // CHANGE ORB STATUS TO VIBRATE
+            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.UNSTABLE);
             orbSM.SwitchState(OrbType.DOUBLE);
         } else {
+            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
             orbSM.SwitchState(OrbType.DOUBLE);
         }
         
