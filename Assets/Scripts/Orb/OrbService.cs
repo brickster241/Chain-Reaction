@@ -10,6 +10,7 @@ public class OrbService : MonoBehaviour
     private PlayerType orbPlayer = PlayerType.NONE;
     private OrbSM orbSM;
     private OrbStatusSM orbStatusSM;
+    private TileService tileService = null;
 
     private void Start() {
         orbSM = new OrbSM();
@@ -17,6 +18,14 @@ public class OrbService : MonoBehaviour
         orbSM.SetOrbService(this);
         orbStatusSM.SetOrbService(this);
         DisableOrb();
+    }
+
+    public void SetTileService(TileService _tileService) {
+        tileService = _tileService;
+    }
+
+    public TileService GetTileService() {
+        return tileService;
     }
 
     public void DisableOrb() {
@@ -55,6 +64,14 @@ public class OrbService : MonoBehaviour
 
     public void OnOrbClick() {
         orbSM.OnOrbClick();
+    }
+
+    public OrbType GetOrbType() {
+        return orbSM.GetOrbType();
+    }
+
+    public OrbStatus GetOrbStatus() {
+        return orbStatusSM.GetOrbStatus();
     }
 
 }

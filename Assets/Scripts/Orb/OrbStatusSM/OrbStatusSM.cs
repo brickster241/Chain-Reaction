@@ -52,4 +52,14 @@ public class OrbStatusSM
             return null;
         }
     }
+
+    public OrbStatus GetOrbStatus() {
+        if (currentOrbStatus == orbUnstableStatus) {
+            return OrbStatus.UNSTABLE;
+        } else if (currentOrbStatus == orbStableStatus) {
+            return OrbStatus.STABLE;
+        } else {
+            return OrbStatus.NONE;
+        }
+    }
 }

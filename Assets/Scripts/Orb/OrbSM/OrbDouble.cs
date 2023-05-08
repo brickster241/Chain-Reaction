@@ -20,8 +20,7 @@ public class OrbDouble : OrbBase
         base.OnOrbClick();
         TileType tileType = orbSM.GetOrbService().transform.parent.gameObject.GetComponent<TileService>().tileType;
         if (tileType == TileType.EDGE){
-            // Debug.Log("Invoke Chain Reaction.");
-            orbSM.GetOrbService().DisableOrb();
+            orbSM.GetOrbService().GetTileService().InvokeChainReaction();
         } else {
             orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.UNSTABLE);
             orbSM.SwitchState(OrbType.TRIPLE);

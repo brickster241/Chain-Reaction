@@ -58,4 +58,16 @@ public class OrbSM
         if (currentOrbType != null)
             currentOrbType.OnOrbClick();
     }
+
+    public OrbType GetOrbType() {
+        if (currentOrbType == orbSingle) {
+            return OrbType.SINGLE;
+        } else if (currentOrbType == orbDouble) {
+            return OrbType.DOUBLE;
+        } else if (currentOrbType == orbTriple) {
+            return OrbType.TRIPLE;
+        } else {
+            return OrbType.NONE;
+        }
+    }
 }

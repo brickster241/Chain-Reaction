@@ -18,7 +18,6 @@ public class OrbTriple : OrbBase
     public override void OnOrbClick()
     {
         base.OnOrbClick();
-        // Debug.Log("Invoke Chain Reaction");
-        orbSM.GetOrbService().DisableOrb();
+        orbSM.GetOrbService().GetTileService().InvokeChainReaction();
     }
 }

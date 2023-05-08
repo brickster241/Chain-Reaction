@@ -9,6 +9,15 @@ public class TileService : MonoBehaviour
     private Vector2Int tileIndex;
     public List<TileService> Neighbours;
     [SerializeField] OrbService orbService;
+    private GridService gridService = null;
+
+    private void Start() {
+        orbService.SetTileService(this);   
+    }
+
+    public void SetGridService(GridService _gridService) {
+        gridService = _gridService;
+    }
 
     public void SetTileNeighbours(List<TileService> TileNeighbours) {
         Neighbours = TileNeighbours;
@@ -39,5 +48,9 @@ public class TileService : MonoBehaviour
 
     public OrbService GetOrbService() {
         return orbService;
+    }
+
+    public void InvokeChainReaction() {
+        gridService.InvokeChainReaction(this);
     }
 }

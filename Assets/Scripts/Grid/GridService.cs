@@ -16,10 +16,12 @@ public class GridService : MonoBehaviour
 
     TileService[, ] GridTiles;
     Vector2Int hoverIndex;
+    bool isChainReaction;
 
     // Start is called before the first frame update
     void Start()
     {
+        isChainReaction = false;
         hoverIndex = new Vector2Int(-1, -1);
         GridTiles = new TileService[ROWS, COLS];
         GenerateGrid();
@@ -44,6 +46,7 @@ public class GridService : MonoBehaviour
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 TileService tile = GetTile(i, j);
+                tile.SetGridService(this);
                 tile.SetTileIndex(i, j);
                 tile.SetTileNeighbours(GetTileNeighbours(i, j));
                 tile.SetTileType();
@@ -96,6 +99,19 @@ public class GridService : MonoBehaviour
     private void Update() {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         UpdateTileColors(mousePosition);
+        if (Input.GetMouseButtonDown(0)) {
+            UpdateOnTileClick(mousePosition);
+        }
+    }
+
+    public void UpdateOnTileClick(Vector3 mousePosition) {
+        Vector3 mouseOffsetPosition = mousePosition - CalculateTileOffset();
+        float row = (-mouseOffsetPosition.y + TilePrefab.transform.localScale.y * 0.5f) / TilePrefab.transform.localScale.y;
+        float col = (mouseOffsetPosition.x + TilePrefab.transform.localScale.x * 0.5f) / TilePrefab.transform.localScale.x;
+        Vector2Int tileIndex = new Vector2Int((int)row, (int)col);
+        if (isTileValid(tileIndex.x, tileIndex.y) && !isChainReaction) {
+            GridTiles[tileIndex.x, tileIndex.y].OnTileClick();
+        }
     }
 
     public void UpdateTileColors(Vector3 mousePosition) {
@@ -103,7 +119,6 @@ public class GridService : MonoBehaviour
         float row = (-mouseOffsetPosition.y + TilePrefab.transform.localScale.y * 0.5f) / TilePrefab.transform.localScale.y;
         float col = (mouseOffsetPosition.x + TilePrefab.transform.localScale.x * 0.5f) / TilePrefab.transform.localScale.x;
         Vector2Int newhoverIndex = new Vector2Int((int)row, (int)col);
-        Debug.Log(newhoverIndex);
         if (newhoverIndex == hoverIndex)
             return;
         if (isTileValid(hoverIndex.x, hoverIndex.y)) {
@@ -115,6 +130,33 @@ public class GridService : MonoBehaviour
         } else {
             hoverIndex.x = -1;
             hoverIndex.y = -1;
+        }
+    }
+
+    public void InvokeChainReaction(TileService tile) {
+        StartCoroutine(StartChainReaction(tile));
+    }
+
+    private IEnumerator StartChainReaction(TileService tile) {
+        if (!isChainReaction) {
+            Queue<TileService> tiles = new Queue<TileService>();
+            isChainReaction = true;
+            tiles.Enqueue(tile);
+            while (tiles.Count > 0) {
+                TileService frontTile = tiles.Dequeue();
+                frontTile.GetOrbService().DisableOrb();
+                yield return new WaitForSeconds(0.75f);
+                for (int i = 0; i < frontTile.Neighbours.Count; i++) {
+                    TileService neighbourTile = frontTile.Neighbours[i];
+                    TileType neighbourTileType = neighbourTile.tileType;
+                    OrbStatus neighbourOrbStatus = neighbourTile.GetOrbService().GetOrbStatus();
+                    if (neighbourOrbStatus == OrbStatus.UNSTABLE) {
+                        tiles.Enqueue(neighbourTile);
+                    }
+                    neighbourTile.OnTileClick();
+                }
+            }
+            isChainReaction = false;
         }
     }
 }
