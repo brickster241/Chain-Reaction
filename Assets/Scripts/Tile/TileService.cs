@@ -5,18 +5,14 @@ using UnityEngine;
 public class TileService : MonoBehaviour
 {   
     [SerializeField] SpriteRenderer tileSprite;
+    [SerializeField] SpriteRenderer tileOutlineSprite;
     public TileType tileType;
     private Vector2Int tileIndex;
     public List<TileService> Neighbours;
     [SerializeField] OrbService orbService;
-    private GridService gridService = null;
 
     private void Start() {
         orbService.SetTileService(this);   
-    }
-
-    public void SetGridService(GridService _gridService) {
-        gridService = _gridService;
     }
 
     public void SetTileNeighbours(List<TileService> TileNeighbours) {
@@ -42,6 +38,22 @@ public class TileService : MonoBehaviour
         tileSprite.color = color;
     }
 
+    public void SetTileOutlineColor(Color color) {
+        tileOutlineSprite.color = color;
+    }
+
+    public void SetOrbPlayerType(PlayerType playerType) {
+        orbService.SetOrbPlayer(playerType);
+    }
+
+    public OrbStatus GetOrbStatus() {
+        return orbService.GetOrbStatus();
+    }
+
+    public PlayerType GetPlayerType() {
+        return orbService.GetOrbPlayerType();
+    }
+
     public void OnTileClick() {
         orbService.OnOrbClick();
     }
@@ -51,6 +63,6 @@ public class TileService : MonoBehaviour
     }
 
     public void InvokeChainReaction() {
-        gridService.InvokeChainReaction(this);
+        GridService.Instance.InvokeChainReaction(this);
     }
 }

@@ -300,6 +300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1532412593}
+  - component: {fileID: 1532412595}
   - component: {fileID: 1532412594}
   m_Layer: 0
   m_Name: Grid
@@ -340,3 +341,16 @@ MonoBehaviour:
   TilePrefab: {fileID: 2584951619189372888, guid: 8a7432057d5269144945a15d7f763797, type: 3}
   TileDefaultColor: {r: 0.12941177, g: 0.12941177, b: 0.12941177, a: 1}
   TileHoverColor: {r: 0.25882354, g: 0.25882354, b: 0.25882354, a: 1}
+--- !u!114 &1532412595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532412592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dcc6d0f011912e4e8009e25096e3765, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Players: 01000000020000000300000004000000

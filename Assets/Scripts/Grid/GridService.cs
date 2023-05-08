@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridService : MonoBehaviour
+public class GridService : GenericMonoSingleton<GridService>
 {
     [Range(5, 10)]
     [SerializeField] int ROWS = 10;
@@ -15,6 +15,7 @@ public class GridService : MonoBehaviour
     [SerializeField] Color TileHoverColor;
 
     TileService[, ] GridTiles;
+    PlayerType currentPlayerType;
     Vector2Int hoverIndex;
     bool isChainReaction;
 
@@ -46,7 +47,6 @@ public class GridService : MonoBehaviour
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 TileService tile = GetTile(i, j);
-                tile.SetGridService(this);
                 tile.SetTileIndex(i, j);
                 tile.SetTileNeighbours(GetTileNeighbours(i, j));
                 tile.SetTileType();
@@ -87,6 +87,24 @@ public class GridService : MonoBehaviour
         return TileNeighbours;
     }
 
+    public void UpdateGridOutlineColor(PlayerType playerType) {
+        currentPlayerType = playerType;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                Color color = Color.white;
+                if (playerType == PlayerType.RED) {
+                    GridTiles[i, j].SetTileOutlineColor(new Color(1f, 0.6f, 0.6f));
+                } else if (playerType == PlayerType.GREEN) {
+                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 1f, 0.6f));
+                } else if (playerType == PlayerType.BLUE) {
+                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 0.6f, 1f));
+                } else if (playerType == PlayerType.YELLOW) {
+                    GridTiles[i, j].SetTileOutlineColor(new Color(0.7f, 0.7f, 0f));
+                }
+            }
+        }
+    }
+
     private Vector3 CalculateTileOffset() {
         float tileWidth = TilePrefab.transform.localScale.x;
         float tileHeight = TilePrefab.transform.localScale.y;
@@ -110,7 +128,15 @@ public class GridService : MonoBehaviour
         float col = (mouseOffsetPosition.x + TilePrefab.transform.localScale.x * 0.5f) / TilePrefab.transform.localScale.x;
         Vector2Int tileIndex = new Vector2Int((int)row, (int)col);
         if (isTileValid(tileIndex.x, tileIndex.y) && !isChainReaction) {
-            GridTiles[tileIndex.x, tileIndex.y].OnTileClick();
+            PlayerType playerType = GridTiles[tileIndex.x, tileIndex.y].GetPlayerType();
+            if (playerType == PlayerType.NONE || playerType == currentPlayerType) {
+                TileService tileService = GridTiles[tileIndex.x, tileIndex.y];
+                tileService.SetOrbPlayerType(currentPlayerType);
+                bool isTileUnstable = (tileService.GetOrbStatus() == OrbStatus.UNSTABLE);
+                tileService.OnTileClick();
+                if (!isTileUnstable) 
+                    PlayerManager.Instance.UpdateTurn();
+            }
         }
     }
 
@@ -139,24 +165,34 @@ public class GridService : MonoBehaviour
 
     private IEnumerator StartChainReaction(TileService tile) {
         if (!isChainReaction) {
-            Queue<TileService> tiles = new Queue<TileService>();
+            Queue<List<TileService>> tiles = new Queue<List<TileService>>();
+            PlayerType playerType = tile.GetPlayerType();
             isChainReaction = true;
-            tiles.Enqueue(tile);
+            tiles.Enqueue(new List<TileService>() {tile});
             while (tiles.Count > 0) {
-                TileService frontTile = tiles.Dequeue();
-                frontTile.GetOrbService().DisableOrb();
-                yield return new WaitForSeconds(0.75f);
-                for (int i = 0; i < frontTile.Neighbours.Count; i++) {
-                    TileService neighbourTile = frontTile.Neighbours[i];
-                    TileType neighbourTileType = neighbourTile.tileType;
-                    OrbStatus neighbourOrbStatus = neighbourTile.GetOrbService().GetOrbStatus();
-                    if (neighbourOrbStatus == OrbStatus.UNSTABLE) {
-                        tiles.Enqueue(neighbourTile);
+                List<TileService> frontTiles = tiles.Dequeue();
+                List<TileService> nextTiles = new List<TileService>();
+                yield return new WaitForSeconds(0.5f);
+                for (int i = 0; i < frontTiles.Count; i++) {
+                    TileService frontTile = frontTiles[i];
+                    frontTile.GetOrbService().DisableOrb();
+                    for (int j = 0; j < frontTile.Neighbours.Count; j++) {
+                        TileService neighbourTile = frontTile.Neighbours[j];
+                        TileType neighbourTileType = neighbourTile.tileType;
+                        OrbStatus neighbourOrbStatus = neighbourTile.GetOrbService().GetOrbStatus();
+                        if (neighbourOrbStatus == OrbStatus.UNSTABLE) {
+                            nextTiles.Add(neighbourTile);
+                        }
+                        neighbourTile.SetOrbPlayerType(playerType);
+                        neighbourTile.OnTileClick();
                     }
-                    neighbourTile.OnTileClick();
                 }
+                if (nextTiles.Count != 0)
+                    tiles.Enqueue(nextTiles);
+                
             }
             isChainReaction = false;
+            PlayerManager.Instance.UpdateTurn();
         }
     }
 }

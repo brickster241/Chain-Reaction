@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSprite: {fileID: 6270232604403134357}
+  tileOutlineSprite: {fileID: 6270232605889689500}
   tileType: 0
   Neighbours: []
   orbService: {fileID: 4241967475866159636}

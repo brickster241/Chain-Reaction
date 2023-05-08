@@ -29,24 +29,33 @@ public class OrbService : MonoBehaviour
     }
 
     public void DisableOrb() {
+        SetOrbPlayer(PlayerType.NONE);
         SwitchOrbState(OrbType.NONE);
         SwitchOrbStatus(OrbStatus.NONE);
     }
 
     public void SetOrbPlayer(PlayerType playerType) {
         orbPlayer = playerType;
-        if (orbPlayer == PlayerType.NONE) {
-            FirstOrb.color = Color.white;
-            SecondOrb.color = Color.white;
-            ThirdOrb.color = Color.white;
+        if (orbPlayer == PlayerType.BLUE) {
+            FirstOrb.color = Color.blue;
+            SecondOrb.color = Color.blue;
+            ThirdOrb.color = Color.blue;
         } else if (orbPlayer == PlayerType.RED) {
             FirstOrb.color = Color.red;
             SecondOrb.color = Color.red;
             ThirdOrb.color = Color.red;
-        } else {
+        } else if (orbPlayer == PlayerType.GREEN){
             FirstOrb.color = Color.green;
             SecondOrb.color = Color.green;
             ThirdOrb.color = Color.green;
+        } else if (orbPlayer == PlayerType.YELLOW){
+            FirstOrb.color = Color.yellow;
+            SecondOrb.color = Color.yellow;
+            ThirdOrb.color = Color.yellow;
+        } else {
+            FirstOrb.color = Color.white;
+            SecondOrb.color = Color.white;
+            ThirdOrb.color = Color.white;
         }
     }
 
