@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileState
+public enum OrbStatus
 {
-    EMPTY,
-    SINGLE,
-    DOUBLE,
-    TRIPLE
+    NONE,
+    STABLE,
+    UNSTABLE
 }

@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileBaseState
+public class OrbBase
 {
-    protected TileSM tileSM;
+    protected OrbSM orbSM;
 
-    public TileBaseState(TileSM _tileSM) {
-        tileSM = _tileSM;
+    public OrbBase(OrbSM _orbSM) {
+        orbSM = _orbSM;
     }
 
     public virtual void OnStateEnter() {}
 
     public virtual void OnStateUpdate() {}
-    
+
     public virtual void OnStateExit() {}
+
+    public virtual void OnOrbClick() {}
 }

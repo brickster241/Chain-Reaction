@@ -7,14 +7,8 @@ public class TileService : MonoBehaviour
     public TileType tileType;
     private Vector2Int tileIndex;
     public List<TileService> Neighbours;
-    private TileSM tileSM;
+    [SerializeField] OrbService orbService;
 
-    private void Awake() {
-        tileSM = new TileSM();
-        tileSM.SetTileService(this);
-        tileSM.SwitchState(TileState.EMPTY);
-    }
-    
     public void SetTileNeighbours(List<TileService> TileNeighbours) {
         Neighbours = TileNeighbours;
     }
@@ -34,4 +28,7 @@ public class TileService : MonoBehaviour
         }
     }
 
+    public OrbService GetOrbService() {
+        return orbService;
+    }
 }
