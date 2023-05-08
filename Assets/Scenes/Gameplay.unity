@@ -353,4 +353,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dcc6d0f011912e4e8009e25096e3765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Players: 01000000020000000300000004000000
+  PlayerConfigs: {fileID: 11400000, guid: eb85dada687083e4090adda853ad83da, type: 2}
+  PlayerCount: 3

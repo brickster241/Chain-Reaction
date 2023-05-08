@@ -89,17 +89,13 @@ public class GridService : GenericMonoSingleton<GridService>
 
     public void UpdateGridOutlineColor(PlayerType playerType) {
         currentPlayerType = playerType;
+        PlayerScriptableObject playerConfig = PlayerManager.Instance.GetPlayerConfig(playerType);
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                Color color = Color.white;
-                if (playerType == PlayerType.RED) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(1f, 0.6f, 0.6f));
-                } else if (playerType == PlayerType.GREEN) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 1f, 0.6f));
-                } else if (playerType == PlayerType.BLUE) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 0.6f, 1f));
-                } else if (playerType == PlayerType.YELLOW) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.7f, 0.7f, 0f));
+                if (playerConfig != null) {
+                    GridTiles[i, j].SetTileOutlineColor(playerConfig.PlayerGridColor);
+                } else {
+                    GridTiles[i, j].SetTileOutlineColor(Color.white);
                 }
             }
         }
@@ -194,5 +190,22 @@ public class GridService : GenericMonoSingleton<GridService>
             isChainReaction = false;
             PlayerManager.Instance.UpdateTurn();
         }
+    }
+
+    public Dictionary<PlayerType, int> GetPlayerActiveTileCount(PlayerScriptableObjectList PlayerConfigs, int playerCount) {
+        Dictionary<PlayerType, int> playerTileCount = new Dictionary<PlayerType, int>();
+        for (int i = 0; i < playerCount; i++) {
+            playerTileCount[PlayerConfigs.playerConfigs[i].playerType] = 0;
+        }
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                TileService tile = GridTiles[i, j];
+                PlayerType playerType = tile.GetPlayerType();
+                if (playerType != PlayerType.NONE) {
+                    playerTileCount[playerType] += 1;
+                }
+            }
+        }
+        return playerTileCount;
     }
 }
