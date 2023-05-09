@@ -35,27 +35,31 @@ public class PlayerManager : GenericMonoSingleton<PlayerManager>
                     break;
             }
         }
-        if (IsGameOver(playerTypeCount)) {
-            // CALL UI
+        (bool, PlayerType) GameOver = IsGameOver(playerTypeCount);
+        if (GameOver.Item1) {
+            UIService.Instance.DisplayGameOverUI(GameOver.Item2);
         } else {
             GridService.Instance.UpdateGridOutlineColor(Players[currentPlayerIndex]);
         }
     }
 
-    private bool IsGameOver(Dictionary<PlayerType, int> playerTypeCount) {
+    private (bool, PlayerType) IsGameOver(Dictionary<PlayerType, int> playerTypeCount) {
         if (turnCount <= 1)
-            return false;
+            return (false, PlayerType.NONE);
         int activePlayers = 0;
+        PlayerType activePlayer = PlayerType.NONE;
         for (int i = 0; i < PlayerCount; i++) {
             PlayerType playerType = PlayerConfigs.playerConfigs[i].playerType;
-            if (playerTypeCount[playerType] > 0)
+            if (playerTypeCount[playerType] > 0) {
                 activePlayers += 1;
+                activePlayer = playerType;
+            }
         }
         if (activePlayers == 1) {
             Debug.Log("GAME OVER.");
-            return true;
+            return (true, activePlayer);
         } else {
-            return false;
+            return (false, PlayerType.NONE);
         }
     }
 

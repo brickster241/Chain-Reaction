@@ -111,10 +111,12 @@ public class GridService : GenericMonoSingleton<GridService>
     }
 
     private void Update() {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        UpdateTileColors(mousePosition);
-        if (Input.GetMouseButtonDown(0)) {
-            UpdateOnTileClick(mousePosition);
+        if (!UIService.Instance.isUIVisible) {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            UpdateTileColors(mousePosition);
+            if (Input.GetMouseButtonDown(0)) {
+                UpdateOnTileClick(mousePosition);
+            }
         }
     }
 

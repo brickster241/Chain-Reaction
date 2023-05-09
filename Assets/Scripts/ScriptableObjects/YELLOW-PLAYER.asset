@@ -15,3 +15,4 @@ MonoBehaviour:
   playerType: 4
   PlayerOrbColor: {r: 1, g: 1, b: 0, a: 1}
   PlayerGridColor: {r: 1, g: 0.99999994, b: 0.39215687, a: 1}
+  PlayerWinText: YELLOW
