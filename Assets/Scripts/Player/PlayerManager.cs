@@ -6,13 +6,14 @@ public class PlayerManager : GenericMonoSingleton<PlayerManager>
 {
     [SerializeField] PlayerScriptableObjectList PlayerConfigs;
     [SerializeField] int PlayerCount;
-    int turnCount = 0;
+    int turnCount;
     List<PlayerType> Players;
     int currentPlayerIndex = -1;
 
     private void Start() {
         Players = new List<PlayerType>();
-        PlayerCount = Mathf.Min(PlayerCount, PlayerConfigs.playerConfigs.Length);
+        turnCount = 0;
+        PlayerCount = PlayerPrefs.GetInt("PlayerCount", 2);
         for (int i = 0; i < PlayerCount; i++) {
             Players.Add(PlayerConfigs.playerConfigs[i].playerType);
         }
