@@ -89,17 +89,13 @@ public class GridService : GenericMonoSingleton<GridService>
 
     public void UpdateGridOutlineColor(PlayerType playerType) {
         currentPlayerType = playerType;
+        PlayerScriptableObject playerConfig = PlayerManager.Instance.GetPlayerConfig(playerType);
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                Color color = Color.white;
-                if (playerType == PlayerType.RED) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(1f, 0.6f, 0.6f));
-                } else if (playerType == PlayerType.GREEN) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 1f, 0.6f));
-                } else if (playerType == PlayerType.BLUE) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.6f, 0.6f, 1f));
-                } else if (playerType == PlayerType.YELLOW) {
-                    GridTiles[i, j].SetTileOutlineColor(new Color(0.7f, 0.7f, 0f));
+                if (playerConfig != null) {
+                    GridTiles[i, j].SetTileOutlineColor(playerConfig.PlayerGridColor);
+                } else {
+                    GridTiles[i, j].SetTileOutlineColor(Color.white);
                 }
             }
         }
@@ -115,10 +111,12 @@ public class GridService : GenericMonoSingleton<GridService>
     }
 
     private void Update() {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        UpdateTileColors(mousePosition);
-        if (Input.GetMouseButtonDown(0)) {
-            UpdateOnTileClick(mousePosition);
+        if (!UIService.Instance.isUIVisible) {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            UpdateTileColors(mousePosition);
+            if (Input.GetMouseButtonDown(0)) {
+                UpdateOnTileClick(mousePosition);
+            }
         }
     }
 
@@ -165,17 +163,18 @@ public class GridService : GenericMonoSingleton<GridService>
 
     private IEnumerator StartChainReaction(TileService tile) {
         if (!isChainReaction) {
+            Debug.Log("Started Chain Reaction");
             Queue<List<TileService>> tiles = new Queue<List<TileService>>();
             PlayerType playerType = tile.GetPlayerType();
+            Color orbColor = tile.GetOrbService().GetOrbColor();
             isChainReaction = true;
             tiles.Enqueue(new List<TileService>() {tile});
             while (tiles.Count > 0) {
                 List<TileService> frontTiles = tiles.Dequeue();
                 List<TileService> nextTiles = new List<TileService>();
-                yield return new WaitForSeconds(0.5f);
+                yield return StartCoroutine(ExplodeFrontTiles(frontTiles, orbColor));
                 for (int i = 0; i < frontTiles.Count; i++) {
                     TileService frontTile = frontTiles[i];
-                    frontTile.GetOrbService().DisableOrb();
                     for (int j = 0; j < frontTile.Neighbours.Count; j++) {
                         TileService neighbourTile = frontTile.Neighbours[j];
                         TileType neighbourTileType = neighbourTile.tileType;
@@ -194,5 +193,35 @@ public class GridService : GenericMonoSingleton<GridService>
             isChainReaction = false;
             PlayerManager.Instance.UpdateTurn();
         }
+    }
+
+    private IEnumerator ExplodeFrontTiles(List<TileService> frontTiles, Color orbColor) {
+        for (int i = 0; i < frontTiles.Count; i++) {
+            TileService frontTile = frontTiles[i];
+            frontTile.GetOrbService().DisableOrb();
+            List<Transform> NeighbourTransforms = new List<Transform>();
+            for (int k = 0; k < frontTile.Neighbours.Count; k++) {
+                NeighbourTransforms.Add(frontTile.Neighbours[k].transform);
+            }
+            ExplosionService.Instance.ExplodeOrbs(frontTile.transform, NeighbourTransforms, orbColor);    
+        }
+        yield return new WaitForSeconds(0.25f);
+    }
+
+    public Dictionary<PlayerType, int> GetPlayerActiveTileCount(PlayerScriptableObjectList PlayerConfigs, int playerCount) {
+        Dictionary<PlayerType, int> playerTileCount = new Dictionary<PlayerType, int>();
+        for (int i = 0; i < playerCount; i++) {
+            playerTileCount[PlayerConfigs.playerConfigs[i].playerType] = 0;
+        }
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                TileService tile = GridTiles[i, j];
+                PlayerType playerType = tile.GetPlayerType();
+                if (playerType != PlayerType.NONE) {
+                    playerTileCount[playerType] += 1;
+                }
+            }
+        }
+        return playerTileCount;
     }
 }
