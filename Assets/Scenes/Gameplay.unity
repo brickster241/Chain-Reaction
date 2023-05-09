@@ -1528,6 +1528,7 @@ GameObject:
   - component: {fileID: 1532412593}
   - component: {fileID: 1532412595}
   - component: {fileID: 1532412594}
+  - component: {fileID: 1532412596}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -1581,6 +1582,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerConfigs: {fileID: 11400000, guid: eb85dada687083e4090adda853ad83da, type: 2}
   PlayerCount: 2
+--- !u!114 &1532412596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532412592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca9acde46d90f9c4eb534f79578ab8e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OrbPrefab: {fileID: 4996575621959792564, guid: 33995260beedd4d428fbcdd22e59099f, type: 3}
+  InitialPoolCount: 50
 --- !u!1 &1830276937
 GameObject:
   m_ObjectHideFlags: 0

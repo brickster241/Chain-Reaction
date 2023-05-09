@@ -163,17 +163,18 @@ public class GridService : GenericMonoSingleton<GridService>
 
     private IEnumerator StartChainReaction(TileService tile) {
         if (!isChainReaction) {
+            Debug.Log("Started Chain Reaction");
             Queue<List<TileService>> tiles = new Queue<List<TileService>>();
             PlayerType playerType = tile.GetPlayerType();
+            Color orbColor = tile.GetOrbService().GetOrbColor();
             isChainReaction = true;
             tiles.Enqueue(new List<TileService>() {tile});
             while (tiles.Count > 0) {
                 List<TileService> frontTiles = tiles.Dequeue();
                 List<TileService> nextTiles = new List<TileService>();
-                yield return new WaitForSeconds(0.5f);
+                yield return StartCoroutine(ExplodeFrontTiles(frontTiles, orbColor));
                 for (int i = 0; i < frontTiles.Count; i++) {
                     TileService frontTile = frontTiles[i];
-                    frontTile.GetOrbService().DisableOrb();
                     for (int j = 0; j < frontTile.Neighbours.Count; j++) {
                         TileService neighbourTile = frontTile.Neighbours[j];
                         TileType neighbourTileType = neighbourTile.tileType;
@@ -192,6 +193,19 @@ public class GridService : GenericMonoSingleton<GridService>
             isChainReaction = false;
             PlayerManager.Instance.UpdateTurn();
         }
+    }
+
+    private IEnumerator ExplodeFrontTiles(List<TileService> frontTiles, Color orbColor) {
+        for (int i = 0; i < frontTiles.Count; i++) {
+            TileService frontTile = frontTiles[i];
+            frontTile.GetOrbService().DisableOrb();
+            List<Transform> NeighbourTransforms = new List<Transform>();
+            for (int k = 0; k < frontTile.Neighbours.Count; k++) {
+                NeighbourTransforms.Add(frontTile.Neighbours[k].transform);
+            }
+            ExplosionService.Instance.ExplodeOrbs(frontTile.transform, NeighbourTransforms, orbColor);    
+        }
+        yield return new WaitForSeconds(0.25f);
     }
 
     public Dictionary<PlayerType, int> GetPlayerActiveTileCount(PlayerScriptableObjectList PlayerConfigs, int playerCount) {

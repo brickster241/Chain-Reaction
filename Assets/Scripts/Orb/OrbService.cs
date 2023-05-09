@@ -20,6 +20,10 @@ public class OrbService : MonoBehaviour
         DisableOrb();
     }
 
+    public Color GetOrbColor() {
+        return FirstOrb.color;
+    }
+
     public void SetTileService(TileService _tileService) {
         tileService = _tileService;
     }
