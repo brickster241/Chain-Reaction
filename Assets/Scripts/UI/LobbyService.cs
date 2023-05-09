@@ -14,11 +14,13 @@ public class LobbyService : GenericMonoSingleton<LobbyService>
     }
 
     public void OnButtonClick(int count) {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         PlayerPrefs.SetInt("PlayerCount", count);
         UpdatePlayerCountText();
     }
 
     public void OnPlayButtonClick() {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

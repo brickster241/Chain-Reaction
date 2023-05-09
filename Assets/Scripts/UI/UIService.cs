@@ -22,6 +22,7 @@ public class UIService : GenericMonoSingleton<UIService>
     }
 
     public void DisplayGameOverUI(PlayerType playerType) {
+        AudioService.Instance.PlayAudio(SoundType.GAME_COMPLETE);
         isUIVisible = true;
         PlayerScriptableObject playerConfig = PlayerManager.Instance.GetPlayerConfig(playerType);
         UIText.text = playerConfig.PlayerWinText + " WINS !!";
@@ -33,6 +34,7 @@ public class UIService : GenericMonoSingleton<UIService>
     }
 
     public void OnBackButtonClick() {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         isUIVisible = false;
         PauseButton.gameObject.SetActive(true);
         OuterRestartButton.gameObject.SetActive(true);
@@ -40,16 +42,19 @@ public class UIService : GenericMonoSingleton<UIService>
     }
 
     public void OnRestartButtonClick() {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         DOTween.Clear();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OnMainMenuButtonClick() {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         DOTween.Clear();
         SceneManager.LoadScene(0);
     }
 
     public void OnPauseButtonClick() {
+        AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
         OuterRestartButton.gameObject.SetActive(false);
         PauseButton.gameObject.SetActive(false);
         isUIVisible = true;

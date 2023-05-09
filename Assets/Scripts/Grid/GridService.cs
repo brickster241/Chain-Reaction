@@ -17,12 +17,12 @@ public class GridService : GenericMonoSingleton<GridService>
     TileService[, ] GridTiles;
     PlayerType currentPlayerType;
     Vector2Int hoverIndex;
-    bool isChainReaction;
+    bool isChainReactionRunning;
 
     // Start is called before the first frame update
     void Start()
     {
-        isChainReaction = false;
+        isChainReactionRunning = false;
         hoverIndex = new Vector2Int(-1, -1);
         GridTiles = new TileService[ROWS, COLS];
         GenerateGrid();
@@ -125,7 +125,7 @@ public class GridService : GenericMonoSingleton<GridService>
         float row = (-mouseOffsetPosition.y + TilePrefab.transform.localScale.y * 0.5f) / TilePrefab.transform.localScale.y;
         float col = (mouseOffsetPosition.x + TilePrefab.transform.localScale.x * 0.5f) / TilePrefab.transform.localScale.x;
         Vector2Int tileIndex = new Vector2Int((int)row, (int)col);
-        if (isTileValid(tileIndex.x, tileIndex.y) && !isChainReaction) {
+        if (isTileValid(tileIndex.x, tileIndex.y) && !isChainReactionRunning) {
             PlayerType playerType = GridTiles[tileIndex.x, tileIndex.y].GetPlayerType();
             if (playerType == PlayerType.NONE || playerType == currentPlayerType) {
                 TileService tileService = GridTiles[tileIndex.x, tileIndex.y];
@@ -162,12 +162,11 @@ public class GridService : GenericMonoSingleton<GridService>
     }
 
     private IEnumerator StartChainReaction(TileService tile) {
-        if (!isChainReaction) {
-            Debug.Log("Started Chain Reaction");
+        if (!isChainReactionRunning) {
             Queue<List<TileService>> tiles = new Queue<List<TileService>>();
             PlayerType playerType = tile.GetPlayerType();
             Color orbColor = tile.GetOrbService().GetOrbColor();
-            isChainReaction = true;
+            isChainReactionRunning = true;
             tiles.Enqueue(new List<TileService>() {tile});
             while (tiles.Count > 0) {
                 List<TileService> frontTiles = tiles.Dequeue();
@@ -190,7 +189,7 @@ public class GridService : GenericMonoSingleton<GridService>
                     tiles.Enqueue(nextTiles);
                 
             }
-            isChainReaction = false;
+            isChainReactionRunning = false;
             PlayerManager.Instance.UpdateTurn();
         }
     }
@@ -198,6 +197,7 @@ public class GridService : GenericMonoSingleton<GridService>
     private IEnumerator ExplodeFrontTiles(List<TileService> frontTiles, Color orbColor) {
         for (int i = 0; i < frontTiles.Count; i++) {
             TileService frontTile = frontTiles[i];
+            AudioService.Instance.PlayAudio(SoundType.POP_CLICK);
             frontTile.GetOrbService().DisableOrb();
             List<Transform> NeighbourTransforms = new List<Transform>();
             for (int k = 0; k < frontTile.Neighbours.Count; k++) {

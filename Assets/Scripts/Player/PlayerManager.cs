@@ -21,6 +21,7 @@ public class PlayerManager : GenericMonoSingleton<PlayerManager>
     }
 
     public void UpdateTurn() {
+        AudioService.Instance.PlayAudio(SoundType.UPDATE_TURN);
         Dictionary<PlayerType, int> playerTypeCount = GridService.Instance.GetPlayerActiveTileCount(PlayerConfigs, PlayerCount);
         if (currentPlayerIndex == -1 || turnCount == 1) {
             currentPlayerIndex = (currentPlayerIndex + 1) % PlayerCount;
@@ -57,7 +58,6 @@ public class PlayerManager : GenericMonoSingleton<PlayerManager>
             }
         }
         if (activePlayers == 1) {
-            Debug.Log("GAME OVER.");
             return (true, activePlayer);
         } else {
             return (false, PlayerType.NONE);
