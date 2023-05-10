@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Generics;
 using Enums;
+using Scriptables;
 
 namespace Services {
+    /*
+        PlayerManager MonoSingleton Class. Keeps track of Active Players Left in the Game & Updates Turn.
+    */
     public class PlayerManager : GenericMonoSingleton<PlayerManager>
     {
         [SerializeField] PlayerScriptableObjectList PlayerConfigs;
@@ -23,6 +27,9 @@ namespace Services {
             UpdateTurn();
         }
 
+        /*
+            UpdateTurn Method. Changes the currentPlayer to the next ActivePlayer. Also Checks for Win Condition.
+        */
         public void UpdateTurn() {
             AudioService.Instance.PlayAudio(SoundType.UPDATE_TURN);
             Dictionary<PlayerType, int> playerTypeCount = GridService.Instance.GetPlayerActiveTileCount(PlayerConfigs, PlayerCount);
@@ -48,6 +55,9 @@ namespace Services {
             }
         }
 
+        /*
+            Checks if the Game is Complete. Does by checking no. of active Players.
+        */
         private (bool, PlayerType) IsGameOver(Dictionary<PlayerType, int> playerTypeCount) {
             if (turnCount <= 1)
                 return (false, PlayerType.NONE);
@@ -67,6 +77,9 @@ namespace Services {
             }
         }
 
+        /*
+            Returns Player Configuation based on PlayerType. Used to UPDATE Grid Outline Color.
+        */
         public PlayerScriptableObject GetPlayerConfig(PlayerType playerType) {
             for (int i = 0; i < PlayerConfigs.playerConfigs.Length; i++) {
                 if (PlayerConfigs.playerConfigs[i].playerType == playerType) {
@@ -76,6 +89,9 @@ namespace Services {
             return null;
         }
 
+        /*
+            Returns the PlayerType of the CurrentPlayer.
+        */
         public PlayerType GetCurrentPlayerType() {
             return Players[currentPlayerIndex];
         }

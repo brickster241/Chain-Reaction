@@ -5,6 +5,10 @@ using Enums;
 using StateMachine.Orb;
 
 namespace Controllers {
+    /*
+        OrbController class. Attached to every Orb present on the Tile.
+        Handles All attributes + State Switching of Orb. 
+    */
     public class OrbController : MonoBehaviour
     {
         public SpriteRenderer FirstOrb;
@@ -15,6 +19,9 @@ namespace Controllers {
         private OrbStatusSM orbStatusSM;
         private TileController tileController = null;
 
+        /*
+            Initializes OrbState Machine for OrbType & OrbStatus.
+        */
         private void Start() {
             orbSM = new OrbSM();
             orbStatusSM = new OrbStatusSM();
@@ -23,24 +30,39 @@ namespace Controllers {
             DisableOrb();
         }
 
+        /*
+            Returns the Color of the Orb. Used in Chain Reaction.
+        */
         public Color GetOrbColor() {
             return FirstOrb.color;
         }
 
+        /*
+            Sets the TileController reference associated with the Orb.
+        */
         public void SetTileController(TileController _tileController) {
             tileController = _tileController;
         }
 
+        /*
+            Fetches the TileController reference associated with the Orb.
+        */
         public TileController GetTileController() {
             return tileController;
         }
 
+        /*
+            Disables the Orb. Switches OrbColor, OrbType & OrbStatus to NONE.
+        */
         public void DisableOrb() {
             SetOrbPlayer(PlayerType.NONE);
             SwitchOrbState(OrbType.NONE);
             SwitchOrbStatus(OrbStatus.NONE);
         }
-
+        
+        /*
+            Sets the Color of the Orb based on PlayerType.
+        */
         public void SetOrbPlayer(PlayerType playerType) {
             orbPlayer = playerType;
             if (orbPlayer == PlayerType.BLUE) {
@@ -66,26 +88,44 @@ namespace Controllers {
             }
         }
 
+        /*
+            Gets the PlayerType of the Orb.
+        */
         public PlayerType GetOrbPlayerType() {
             return orbPlayer;
         }
 
+        /*
+            Switches OrbStatus to NONE / STABLE / UNSTABLE.
+        */
         public void SwitchOrbStatus(OrbStatus _orbStatus) {
             orbStatusSM.SwitchState(_orbStatus);
         }
 
+        /*
+            Switches OrbType to NONE / SINGLE / DOUBLE / TRIPLE.
+        */
         public void SwitchOrbState(OrbType orbType) {
             orbSM.SwitchState(orbType);
         }
 
+        /*
+            OnOrbClick Method. Is Executed when the Tile associated is Clicked.
+        */
         public void OnOrbClick() {
             orbSM.OnOrbClick();
         }
 
+        /*
+           Returns the current OrbType of the Orb.  
+        */
         public OrbType GetOrbType() {
             return orbSM.GetOrbType();
         }
 
+        /*
+            Returns the current OrbStatus of the Orb.
+        */
         public OrbStatus GetOrbStatus() {
             return orbStatusSM.GetOrbStatus();
         }

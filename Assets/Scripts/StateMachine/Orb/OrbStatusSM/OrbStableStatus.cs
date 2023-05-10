@@ -4,6 +4,9 @@ using UnityEngine;
 using DG.Tweening;
 
 namespace StateMachine.Orb {
+    /*
+        OrbStableStatus class. Handles all the Logic when Orb is in STABLE OrbStatus state.
+    */
     public class OrbStableStatus : OrbStatusBase
     {
 
@@ -11,6 +14,10 @@ namespace StateMachine.Orb {
         Tweener rotation_tweener;
         public OrbStableStatus(OrbStatusSM orbStatusSM) : base(orbStatusSM) {}
 
+        /*
+            OnStateEnter Function. Executed when OrbStatus of Orb switches to STABLE state.
+            Starts Rotating & Shaking Transform slowly.
+        */
         public override void OnStateEnter()
         {
             base.OnStateEnter();
@@ -18,6 +25,10 @@ namespace StateMachine.Orb {
             position_tweener = orbStatusSM.GetOrbController().transform.DOShakePosition(1f, new Vector3(0.01f, 0.01f, 0f)).SetLoops(-1).SetEase(Ease.Linear);
         }
 
+        /*
+            OnStateEcit Function. Executed when OrbStatus of Orb exits from STABLE state.
+            Kills the Tweens.
+        */
         public override void OnStateExit()
         {
             base.OnStateExit();

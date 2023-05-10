@@ -7,8 +7,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Enums;
 using Generics;
+using Scriptables;
 
 namespace Services {
+    /*
+        UIService MonoSingleton Class. Handles all the UI Operations of Gameplay Scene.
+    */
     public class UIService : GenericMonoSingleton<UIService>
     {
         public bool isUIVisible = false;
@@ -24,6 +28,9 @@ namespace Services {
             isUIVisible = false;
         }
 
+        /*
+            Displays UI when Game is Complete.
+        */
         public void DisplayGameOverUI(PlayerType playerType) {
             AudioService.Instance.PlayAudio(SoundType.GAME_COMPLETE);
             isUIVisible = true;
@@ -36,6 +43,9 @@ namespace Services {
             GameUI.SetActive(true);
         }
 
+        /*
+            Returns back to the Game. Disables the UI.
+        */
         public void OnBackButtonClick() {
             AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
             isUIVisible = false;
@@ -44,18 +54,27 @@ namespace Services {
             GameUI.SetActive(false);
         }
 
+        /*
+            Restarts the Game with same no. of Players.
+        */
         public void OnRestartButtonClick() {
             AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
             DOTween.Clear();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        /*
+            Loads the Lobby Scene.
+        */
         public void OnMainMenuButtonClick() {
             AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
             DOTween.Clear();
             SceneManager.LoadScene(0);
         }
 
+        /*
+            Enables the UI & Pauses the Game.
+        */
         public void OnPauseButtonClick() {
             AudioService.Instance.PlayAudio(SoundType.BUTTON_CLICK);
             OuterRestartButton.gameObject.SetActive(false);

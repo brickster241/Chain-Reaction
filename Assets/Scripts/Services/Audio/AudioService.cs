@@ -54,7 +54,7 @@ namespace Services {
         }
 
         /*
-            Stops the Audio of specified SoundType.
+            Stops the Audio of specified SoundType. Can be used in case of Infinite Loop.
         */
         public void StopAudio(SoundType soundType) {
             SoundInfo soundInfo = Array.Find(Sounds, item => item.soundType == soundType);

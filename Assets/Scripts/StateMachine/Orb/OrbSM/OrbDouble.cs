@@ -5,10 +5,17 @@ using Controllers;
 using Enums;
 
 namespace StateMachine.Orb {
+    /*
+        OrbDouble class. Handles all the Logic while Orb is in DOUBLE OrbType State.
+    */
     public class OrbDouble : OrbBase
     {
         public OrbDouble(OrbSM _orbSM) : base(_orbSM) {}
 
+        /*
+            OnStateEnter Function. Executed when Orb first enters the DOUBLE OrbType State.
+            Enables First & Second Orbs.
+        */
         public override void OnStateEnter()
         {
             base.OnStateEnter();
@@ -18,6 +25,9 @@ namespace StateMachine.Orb {
             orbController.ThirdOrb.gameObject.SetActive(false);
         }
 
+        /*
+            OnOrbClick Method. Executed when Orb is in DOUBLE OrbType State and Orb is Clicked.
+        */
         public override void OnOrbClick()
         {
             base.OnOrbClick();

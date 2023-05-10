@@ -5,6 +5,10 @@ using DG.Tweening;
 using Generics;
 
 namespace Services {
+    /*
+        ExplosionService MonoSingleton Class. Handles Logic of simulating Orb Travelling effect.
+        Uses Custom Object Pool to improve performance.
+    */
     public class ExplosionService : GenericMonoSingleton<ExplosionService>
     {
         [SerializeField] GameObject OrbPrefab;
@@ -15,6 +19,9 @@ namespace Services {
             GenerateOrbPool(InitialPoolCount, OrbPrefab);    
         }
 
+        /*
+            Generates the Pool based on PoolCount & OrbPrefab.
+        */
         private void GenerateOrbPool(int PoolCount, GameObject OrbPrefab) {
             OrbPool = new List<GameObject>();
             for (int i = 0; i < PoolCount; i++) {
@@ -24,6 +31,9 @@ namespace Services {
             }      
         }
 
+        /*
+            Gets an orb from the ObjectPool. If no orbs are available, it adds one to the Pool & returns it.
+        */
         public GameObject GetOrb() {
             for (int i = 0; i < OrbPool.Count; i++) {
                 if (!OrbPool[i].activeInHierarchy) {
@@ -36,10 +46,16 @@ namespace Services {
             return Orb;
         }
 
+        /*
+            Returns the Orb back to the Pool.
+        */
         public void ReturnOrb(GameObject Orb) {
             Orb.SetActive(false);
         }
 
+        /*
+            Explodes Orbs in the direction of Neighbouring Transforms.
+        */
         public void ExplodeOrbs(Transform tile, List<Transform> neighbours, Color color) {
             GameObject[] Orbs = new GameObject[neighbours.Count];
             for (int i = 0; i < neighbours.Count; i++) {
@@ -51,10 +67,13 @@ namespace Services {
             }
         }
 
+        /*
+            Displays & Returns the Displayed Orb back in the Pool.
+        */
         private IEnumerator DisplayOrb(GameObject orb) {
             orb.SetActive(true);
             yield return new WaitForSeconds(0.25f);
-            orb.SetActive(false);
+            ReturnOrb(orb);
         }
 
 
