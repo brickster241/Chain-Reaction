@@ -5,7 +5,7 @@ using UnityEngine;
 public class OrbSM
 {
     private OrbBase currentOrbType = null;
-    private OrbService orbService;
+    private OrbController orbController;
     private OrbNone orbNone;
     private OrbSingle orbSingle;
     private OrbDouble orbDouble;
@@ -18,12 +18,12 @@ public class OrbSM
         orbTriple = new OrbTriple(this);
     }
 
-    public void SetOrbService(OrbService _orbService) {
-        orbService = _orbService;
+    public void SetOrbController(OrbController _orbController) {
+        orbController = _orbController;
     }
 
-    public OrbService GetOrbService() {
-        return orbService;
+    public OrbController GetOrbController() {
+        return orbController;
     }
 
     public void SwitchState(OrbType orbType) {

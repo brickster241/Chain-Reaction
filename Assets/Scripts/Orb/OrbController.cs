@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrbService : MonoBehaviour
+public class OrbController : MonoBehaviour
 {
     public SpriteRenderer FirstOrb;
     public SpriteRenderer SecondOrb;
@@ -10,13 +10,13 @@ public class OrbService : MonoBehaviour
     private PlayerType orbPlayer = PlayerType.NONE;
     private OrbSM orbSM;
     private OrbStatusSM orbStatusSM;
-    private TileService tileService = null;
+    private TileController tileController = null;
 
     private void Start() {
         orbSM = new OrbSM();
         orbStatusSM = new OrbStatusSM();
-        orbSM.SetOrbService(this);
-        orbStatusSM.SetOrbService(this);
+        orbSM.SetOrbController(this);
+        orbStatusSM.SetOrbController(this);
         DisableOrb();
     }
 
@@ -24,12 +24,12 @@ public class OrbService : MonoBehaviour
         return FirstOrb.color;
     }
 
-    public void SetTileService(TileService _tileService) {
-        tileService = _tileService;
+    public void SetTileController(TileController _tileController) {
+        tileController = _tileController;
     }
 
-    public TileService GetTileService() {
-        return tileService;
+    public TileController GetTileController() {
+        return tileController;
     }
 
     public void DisableOrb() {

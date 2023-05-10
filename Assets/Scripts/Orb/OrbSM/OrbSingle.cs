@@ -9,23 +9,23 @@ public class OrbSingle : OrbBase
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        OrbService orbService = orbSM.GetOrbService();
-        orbService.FirstOrb.gameObject.SetActive(true);
-        orbService.SecondOrb.gameObject.SetActive(false);
-        orbService.ThirdOrb.gameObject.SetActive(false);
+        OrbController orbController = orbSM.GetOrbController();
+        orbController.FirstOrb.gameObject.SetActive(true);
+        orbController.SecondOrb.gameObject.SetActive(false);
+        orbController.ThirdOrb.gameObject.SetActive(false);
     }
 
     public override void OnOrbClick()
     {
         base.OnOrbClick();
-        TileType tileType = orbSM.GetOrbService().transform.parent.gameObject.GetComponent<TileService>().tileType;
+        TileType tileType = orbSM.GetOrbController().transform.parent.gameObject.GetComponent<TileController>().tileType;
         if (tileType == TileType.CORNER) {
-            orbSM.GetOrbService().GetTileService().InvokeChainReaction();
+            orbSM.GetOrbController().GetTileController().InvokeChainReaction();
         } else if (tileType == TileType.EDGE){
-            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.UNSTABLE);
+            orbSM.GetOrbController().SwitchOrbStatus(OrbStatus.UNSTABLE);
             orbSM.SwitchState(OrbType.DOUBLE);
         } else {
-            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
+            orbSM.GetOrbController().SwitchOrbStatus(OrbStatus.STABLE);
             orbSM.SwitchState(OrbType.DOUBLE);
         }
         

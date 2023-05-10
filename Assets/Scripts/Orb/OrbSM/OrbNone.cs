@@ -9,20 +9,20 @@ public class OrbNone : OrbBase
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        OrbService orbService = orbSM.GetOrbService();
-        orbService.FirstOrb.gameObject.SetActive(false);
-        orbService.SecondOrb.gameObject.SetActive(false);
-        orbService.ThirdOrb.gameObject.SetActive(false);
+        OrbController orbController = orbSM.GetOrbController();
+        orbController.FirstOrb.gameObject.SetActive(false);
+        orbController.SecondOrb.gameObject.SetActive(false);
+        orbController.ThirdOrb.gameObject.SetActive(false);
     }
 
     public override void OnOrbClick()
     {
         base.OnOrbClick();
-        TileType tileType = orbSM.GetOrbService().transform.parent.gameObject.GetComponent<TileService>().tileType;
+        TileType tileType = orbSM.GetOrbController().transform.parent.gameObject.GetComponent<TileController>().tileType;
         if (tileType == TileType.CORNER) {
-            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.UNSTABLE);
+            orbSM.GetOrbController().SwitchOrbStatus(OrbStatus.UNSTABLE);
         } else {
-            orbSM.GetOrbService().SwitchOrbStatus(OrbStatus.STABLE);
+            orbSM.GetOrbController().SwitchOrbStatus(OrbStatus.STABLE);
         }
         orbSM.SwitchState(OrbType.SINGLE);
     }

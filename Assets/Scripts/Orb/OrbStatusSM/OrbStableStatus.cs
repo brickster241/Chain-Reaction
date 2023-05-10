@@ -13,8 +13,8 @@ public class OrbStableStatus : OrbStatusBase
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        rotation_tweener = orbStatusSM.GetOrbService().transform.DORotate(new Vector3(0, 0, 360f), 10f, RotateMode.FastBeyond360).SetRelative(true).SetLoops(-1).SetEase(Ease.Linear);
-        position_tweener = orbStatusSM.GetOrbService().transform.DOShakePosition(1f, new Vector3(0.01f, 0.01f, 0f)).SetLoops(-1).SetEase(Ease.Linear);
+        rotation_tweener = orbStatusSM.GetOrbController().transform.DORotate(new Vector3(0, 0, 360f), 10f, RotateMode.FastBeyond360).SetRelative(true).SetLoops(-1).SetEase(Ease.Linear);
+        position_tweener = orbStatusSM.GetOrbController().transform.DOShakePosition(1f, new Vector3(0.01f, 0.01f, 0f)).SetLoops(-1).SetEase(Ease.Linear);
     }
 
     public override void OnStateExit()

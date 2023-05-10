@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileService : MonoBehaviour
+public class TileController : MonoBehaviour
 {   
     [SerializeField] SpriteRenderer tileSprite;
     [SerializeField] SpriteRenderer tileOutlineSprite;
     public TileType tileType;
     private Vector2Int tileIndex;
-    public List<TileService> Neighbours;
-    [SerializeField] OrbService orbService;
+    public List<TileController> Neighbours;
+    [SerializeField] OrbController orbController;
 
     private void Start() {
-        orbService.SetTileService(this);   
+        orbController.SetTileController(this);   
     }
 
-    public void SetTileNeighbours(List<TileService> TileNeighbours) {
+    public void SetTileNeighbours(List<TileController> TileNeighbours) {
         Neighbours = TileNeighbours;
     }
 
@@ -43,23 +43,23 @@ public class TileService : MonoBehaviour
     }
 
     public void SetOrbPlayerType(PlayerType playerType) {
-        orbService.SetOrbPlayer(playerType);
+        orbController.SetOrbPlayer(playerType);
     }
 
     public OrbStatus GetOrbStatus() {
-        return orbService.GetOrbStatus();
+        return orbController.GetOrbStatus();
     }
 
     public PlayerType GetPlayerType() {
-        return orbService.GetOrbPlayerType();
+        return orbController.GetOrbPlayerType();
     }
 
     public void OnTileClick() {
-        orbService.OnOrbClick();
+        orbController.OnOrbClick();
     }
 
-    public OrbService GetOrbService() {
-        return orbService;
+    public OrbController GetOrbController() {
+        return orbController;
     }
 
     public void InvokeChainReaction() {

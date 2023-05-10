@@ -6,7 +6,7 @@ using DG.Tweening;
 public class OrbStatusSM
 {
     private OrbStatusBase currentOrbStatus = null;
-    private OrbService orbService;
+    private OrbController orbController;
     private OrbStableStatus orbStableStatus;
     private OrbUnstableStatus orbUnstableStatus;
 
@@ -15,12 +15,12 @@ public class OrbStatusSM
         orbUnstableStatus = new OrbUnstableStatus(this);
     }
 
-    public void SetOrbService(OrbService _orbService) {
-        orbService = _orbService;
+    public void SetOrbController(OrbController _orbController) {
+        orbController = _orbController;
     }
 
-    public OrbService GetOrbService() {
-        return orbService;
+    public OrbController GetOrbController() {
+        return orbController;
     }
 
     public void SwitchState(OrbStatus orbStatus) {
@@ -39,8 +39,8 @@ public class OrbStatusSM
     }
 
     private void ResetOrb() {
-        orbService.transform.DORotate(new Vector3(0, 0, 360f), 1f, RotateMode.FastBeyond360);
-        orbService.transform.DOMove(orbService.transform.parent.position, 1f);
+        orbController.transform.DORotate(new Vector3(0, 0, 360f), 1f, RotateMode.FastBeyond360);
+        orbController.transform.DOMove(orbController.transform.parent.position, 1f);
     }
 
     private OrbStatusBase GetOrbStatus(OrbStatus _orbStatus) {

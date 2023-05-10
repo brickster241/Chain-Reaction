@@ -10,11 +10,11 @@ public class GridService : GenericMonoSingleton<GridService>
     [Range(10, 15)]
     [SerializeField] int COLS = 12;
 
-    [SerializeField] TileService TilePrefab;
+    [SerializeField] TileController TilePrefab;
     [SerializeField] Color TileDefaultColor;
     [SerializeField] Color TileHoverColor;
 
-    TileService[, ] GridTiles;
+    TileController[, ] GridTiles;
     PlayerType currentPlayerType;
     Vector2Int hoverIndex;
     bool isChainReactionRunning;
@@ -24,7 +24,7 @@ public class GridService : GenericMonoSingleton<GridService>
     {
         isChainReactionRunning = false;
         hoverIndex = new Vector2Int(-1, -1);
-        GridTiles = new TileService[ROWS, COLS];
+        GridTiles = new TileController[ROWS, COLS];
         GenerateGrid();
         SetTileAttributes();
     }
@@ -36,7 +36,7 @@ public class GridService : GenericMonoSingleton<GridService>
             for (int j = 0; j < COLS; j++) {
                 // CALCULATE OFFSET
                 Vector3 TilePosition = new Vector3(j * TilePrefabScale.y, -i * TilePrefabScale.x, 0f);
-                TileService Tile = GameObject.Instantiate<TileService>(TilePrefab, TilePosition + OffsetTile, Quaternion.identity, transform);
+                TileController Tile = GameObject.Instantiate<TileController>(TilePrefab, TilePosition + OffsetTile, Quaternion.identity, transform);
                 Tile.gameObject.name = "(" + i + ", " + j + ")";
                 GridTiles[i, j] = Tile;
             }
@@ -46,7 +46,7 @@ public class GridService : GenericMonoSingleton<GridService>
     private void SetTileAttributes() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                TileService tile = GetTile(i, j);
+                TileController tile = GetTile(i, j);
                 tile.SetTileIndex(i, j);
                 tile.SetTileNeighbours(GetTileNeighbours(i, j));
                 tile.SetTileType();
@@ -54,7 +54,7 @@ public class GridService : GenericMonoSingleton<GridService>
         }
     }
 
-    public TileService GetTile(int ROW, int COL) {
+    public TileController GetTile(int ROW, int COL) {
         if (0 <= ROW && ROW < ROWS && 0 <= COL && COL < COLS) {
             return GridTiles[ROW, COL];
         } else {
@@ -69,9 +69,9 @@ public class GridService : GenericMonoSingleton<GridService>
         return false;
     }
 
-    private List<TileService> GetTileNeighbours(int ROW, int COL) {
-        TileService tile = GetTile(ROW, COL);
-        List<TileService> TileNeighbours = new List<TileService>();
+    private List<TileController> GetTileNeighbours(int ROW, int COL) {
+        TileController tile = GetTile(ROW, COL);
+        List<TileController> TileNeighbours = new List<TileController>();
         if (isTileValid(ROW - 1, COL)) {
             TileNeighbours.Add(GetTile(ROW - 1, COL));
         }
@@ -128,10 +128,10 @@ public class GridService : GenericMonoSingleton<GridService>
         if (isTileValid(tileIndex.x, tileIndex.y) && !isChainReactionRunning) {
             PlayerType playerType = GridTiles[tileIndex.x, tileIndex.y].GetPlayerType();
             if (playerType == PlayerType.NONE || playerType == currentPlayerType) {
-                TileService tileService = GridTiles[tileIndex.x, tileIndex.y];
-                tileService.SetOrbPlayerType(currentPlayerType);
-                bool isTileUnstable = (tileService.GetOrbStatus() == OrbStatus.UNSTABLE);
-                tileService.OnTileClick();
+                TileController tileController = GridTiles[tileIndex.x, tileIndex.y];
+                tileController.SetOrbPlayerType(currentPlayerType);
+                bool isTileUnstable = (tileController.GetOrbStatus() == OrbStatus.UNSTABLE);
+                tileController.OnTileClick();
                 if (!isTileUnstable) 
                     PlayerManager.Instance.UpdateTurn();
             }
@@ -157,27 +157,27 @@ public class GridService : GenericMonoSingleton<GridService>
         }
     }
 
-    public void InvokeChainReaction(TileService tile) {
+    public void InvokeChainReaction(TileController tile) {
         StartCoroutine(StartChainReaction(tile));
     }
 
-    private IEnumerator StartChainReaction(TileService tile) {
+    private IEnumerator StartChainReaction(TileController tile) {
         if (!isChainReactionRunning) {
-            Queue<List<TileService>> tiles = new Queue<List<TileService>>();
+            Queue<List<TileController>> tiles = new Queue<List<TileController>>();
             PlayerType playerType = tile.GetPlayerType();
-            Color orbColor = tile.GetOrbService().GetOrbColor();
+            Color orbColor = tile.GetOrbController().GetOrbColor();
             isChainReactionRunning = true;
-            tiles.Enqueue(new List<TileService>() {tile});
+            tiles.Enqueue(new List<TileController>() {tile});
             while (tiles.Count > 0) {
-                List<TileService> frontTiles = tiles.Dequeue();
-                List<TileService> nextTiles = new List<TileService>();
+                List<TileController> frontTiles = tiles.Dequeue();
+                List<TileController> nextTiles = new List<TileController>();
                 yield return StartCoroutine(ExplodeFrontTiles(frontTiles, orbColor));
                 for (int i = 0; i < frontTiles.Count; i++) {
-                    TileService frontTile = frontTiles[i];
+                    TileController frontTile = frontTiles[i];
                     for (int j = 0; j < frontTile.Neighbours.Count; j++) {
-                        TileService neighbourTile = frontTile.Neighbours[j];
+                        TileController neighbourTile = frontTile.Neighbours[j];
                         TileType neighbourTileType = neighbourTile.tileType;
-                        OrbStatus neighbourOrbStatus = neighbourTile.GetOrbService().GetOrbStatus();
+                        OrbStatus neighbourOrbStatus = neighbourTile.GetOrbController().GetOrbStatus();
                         if (neighbourOrbStatus == OrbStatus.UNSTABLE) {
                             nextTiles.Add(neighbourTile);
                         }
@@ -194,11 +194,11 @@ public class GridService : GenericMonoSingleton<GridService>
         }
     }
 
-    private IEnumerator ExplodeFrontTiles(List<TileService> frontTiles, Color orbColor) {
+    private IEnumerator ExplodeFrontTiles(List<TileController> frontTiles, Color orbColor) {
         for (int i = 0; i < frontTiles.Count; i++) {
-            TileService frontTile = frontTiles[i];
+            TileController frontTile = frontTiles[i];
             AudioService.Instance.PlayAudio(SoundType.POP_CLICK);
-            frontTile.GetOrbService().DisableOrb();
+            frontTile.GetOrbController().DisableOrb();
             List<Transform> NeighbourTransforms = new List<Transform>();
             for (int k = 0; k < frontTile.Neighbours.Count; k++) {
                 NeighbourTransforms.Add(frontTile.Neighbours[k].transform);
@@ -215,7 +215,7 @@ public class GridService : GenericMonoSingleton<GridService>
         }
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                TileService tile = GridTiles[i, j];
+                TileController tile = GridTiles[i, j];
                 PlayerType playerType = tile.GetPlayerType();
                 if (playerType != PlayerType.NONE) {
                     playerTileCount[playerType] += 1;

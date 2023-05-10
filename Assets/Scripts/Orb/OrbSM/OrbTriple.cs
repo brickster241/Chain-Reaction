@@ -9,15 +9,15 @@ public class OrbTriple : OrbBase
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        OrbService orbService = orbSM.GetOrbService();
-        orbService.FirstOrb.gameObject.SetActive(true);
-        orbService.SecondOrb.gameObject.SetActive(true);
-        orbService.ThirdOrb.gameObject.SetActive(true);
+        OrbController orbController = orbSM.GetOrbController();
+        orbController.FirstOrb.gameObject.SetActive(true);
+        orbController.SecondOrb.gameObject.SetActive(true);
+        orbController.ThirdOrb.gameObject.SetActive(true);
     }
 
     public override void OnOrbClick()
     {
         base.OnOrbClick();
-        orbSM.GetOrbService().GetTileService().InvokeChainReaction();
+        orbSM.GetOrbController().GetTileController().InvokeChainReaction();
     }
 }
