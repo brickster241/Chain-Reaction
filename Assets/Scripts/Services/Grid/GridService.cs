@@ -201,18 +201,16 @@ namespace Services {
         /*
             Starts the Chain Reaction originating from the given Tile.
         */
-        public void InvokeChainReaction(TileController tile) {
-            StartCoroutine(StartChainReaction(tile));
+        public void InvokeChainReaction(TileController tile, Color orbColor) {
+            StartCoroutine(StartChainReaction(tile, orbColor));
         }
 
         /*
             StartChainReaction Coroutine. Implements the Chain Reaction Functionality using Queue of Lists.
         */
-        private IEnumerator StartChainReaction(TileController tile) {
+        private IEnumerator StartChainReaction(TileController tile, Color orbColor) {
             if (!isChainReactionRunning) {
                 Queue<List<TileController>> tiles = new Queue<List<TileController>>();
-                PlayerType playerType = tile.GetPlayerType();
-                Color orbColor = tile.GetOrbController().GetOrbColor();
                 isChainReactionRunning = true;
                 tiles.Enqueue(new List<TileController>() {tile});
                 while (tiles.Count > 0) {
@@ -228,8 +226,9 @@ namespace Services {
                             if (neighbourOrbStatus == OrbStatus.UNSTABLE) {
                                 nextTiles.Add(neighbourTile);
                             }
-                            neighbourTile.SetOrbPlayerType(playerType);
+                            neighbourTile.SetOrbPlayerType(currentPlayerType);
                             neighbourTile.OnTileClick();
+                            yield return null;
                         }
                     }
                     if (nextTiles.Count != 0)

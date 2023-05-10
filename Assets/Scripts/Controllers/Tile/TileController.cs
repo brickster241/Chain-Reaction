@@ -102,8 +102,8 @@ namespace Controllers {
         /*
             Invokes the Chain Reaction Mechanism by calling GridService.
         */
-        public void InvokeChainReaction() {
-            GridService.Instance.InvokeChainReaction(this);
+        public void InvokeChainReaction(Color orbColor) {
+            GridService.Instance.InvokeChainReaction(this, orbColor);
         }
     }
 

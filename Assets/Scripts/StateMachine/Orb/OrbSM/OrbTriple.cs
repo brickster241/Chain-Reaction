@@ -30,7 +30,9 @@ namespace StateMachine.Orb {
         public override void OnOrbClick()
         {
             base.OnOrbClick();
-            orbSM.GetOrbController().GetTileController().InvokeChainReaction();
+            Color orbColor = orbSM.GetOrbController().GetOrbColor();
+            orbSM.GetOrbController().DisableOrb();
+            orbSM.GetOrbController().GetTileController().InvokeChainReaction(orbColor);
         }
     }
 }

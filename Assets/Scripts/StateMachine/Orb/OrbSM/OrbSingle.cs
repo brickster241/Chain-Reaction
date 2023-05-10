@@ -33,7 +33,9 @@ namespace StateMachine.Orb {
             base.OnOrbClick();
             TileType tileType = orbSM.GetOrbController().transform.parent.gameObject.GetComponent<TileController>().tileType;
             if (tileType == TileType.CORNER) {
-                orbSM.GetOrbController().GetTileController().InvokeChainReaction();
+                Color orbColor = orbSM.GetOrbController().GetOrbColor();
+                orbSM.GetOrbController().DisableOrb();
+                orbSM.GetOrbController().GetTileController().InvokeChainReaction(orbColor);
             } else if (tileType == TileType.EDGE){
                 orbSM.GetOrbController().SwitchOrbStatus(OrbStatus.UNSTABLE);
                 orbSM.SwitchState(OrbType.DOUBLE);
