@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileStatus
-{
-    EMPTY,
-    FILLED
+namespace Enums {
+    public enum TileStatus
+    {
+        EMPTY,
+        FILLED
+    }
+
 }
