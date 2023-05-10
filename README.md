@@ -3,6 +3,7 @@
 - If Orb is in Unstable state, clicking on it will explode the Orb, trigger a chain reaction.
 - Upto 4 players can play this game. Goal is to be the last one standing. Good Luck !
 - **Playable WEBGL Link** : [Play](https://brickster241.itch.io/chain-reaction)
+- **Detailed Demo Link** : [Demo](https://www.linkedin.com/posts/ashish-verma-4552b9265_connections-architecture-github-activity-7062050062670966784-VjLC?utm_source=share&utm_medium=member_desktop)
 
 ![Chain-Reaction](https://github.com/brickster241/Chain-Reaction/assets/65897987/8c51b488-f990-413d-ac7d-e05a9ee9b604)
 
@@ -12,6 +13,3 @@
 - Customized **State Machines** for Orb Type (SINGLE, DOUBLE, TRIPLE) and Orb Status (STABLE, UNSTABLE).
 - Customized **Object Pool** to simulate Orb Travelling after triggering Chain Reaction.
 - To simulate chain reaction, **BFS Neighbour - based exploding** is implemented (Nested + Chaining Coroutines).
-
-
-### Demo :
