@@ -4,6 +4,7 @@
 - Upto 4 players can play this game. Goal is to be the last one standing. Good Luck !
 - **Playable WEBGL Link** :
 
+![Chain-Reaction](https://github.com/brickster241/Chain-Reaction/assets/65897987/8c51b488-f990-413d-ac7d-e05a9ee9b604)
 
 ### Features :
 - **Top Down Code Architecture**. Grid -> Tile -> Orb
