@@ -2,7 +2,7 @@
 - A clone of the original mobile Chain-Reaction game.
 - If Orb is in Unstable state, clicking on it will explode the Orb, trigger a chain reaction.
 - Upto 4 players can play this game. Goal is to be the last one standing. Good Luck !
-- **Playable WEBGL Link** :
+- **Playable WEBGL Link** : [Play](https://brickster241.itch.io/chain-reaction)
 
 ![Chain-Reaction](https://github.com/brickster241/Chain-Reaction/assets/65897987/8c51b488-f990-413d-ac7d-e05a9ee9b604)
 
